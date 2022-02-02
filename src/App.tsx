@@ -1,24 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {useEffect, useState} from 'react';
+import styled from 'styled-components';
 
-function App() {
+const Container = styled.div`
+  display: flex;
+`;
+
+const App = () => {
+  //useState
+  const [count, setCount] = useState(0);
+
+  //React Query
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        Hello World
+        <hr></hr>
+        this is count : {count}
       </header>
+      <Container >
+        <button onClick={()=>{setCount( count + 1 )}}>+</button>
+        <button onClick={()=>{if(count>0){setCount( count - 1 )}}}>-</button>
+      </Container>
     </div>
   );
 }
