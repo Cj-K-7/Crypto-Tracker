@@ -71,35 +71,48 @@ interface CoinInterface {
     type: string,
 }
 
-function Coins () {
+function Coins() {
   const [coins, setCoins] = useState<CoinInterface[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(()=>{
-    (async () =>{
-      const data = await fetch("https://api.coinpaprika.com/v1/coins").then(res=>res.json())
+  useEffect(() => {
+    (async () => {
+      const data = await fetch("https://api.coinpaprika.com/v1/coins").then(
+        (res) => res.json()
+      );
       setCoins(data.slice(0, 100));
       setLoading(false);
-      })();
-  },[]) //only begging
+    })();
+  }, []); //only begging
 
   return (
     <Container>
       <Header>
         <Title>Coins</Title>
       </Header>
-      {loading ? <Loader>"Loading..."</Loader> : <CoinsList>
-        {coins.map((coin) => (
-          <Coin key={coin.id}>
-            <Link to={`/${coin.id}`}>
-              <Icon src={`https://cryptoicon-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`}/>
-              {coin.name}
+      {loading ? (
+        <Loader>"Loading..."</Loader>
+      ) : (
+        <CoinsList>
+          {coins.map((coin) => (
+            <Coin key={coin.id}>
+              <Link
+                to={{
+                  pathname: `/${coin.id}`,
+                  state: { name: coin.name },
+                }}
+              >
+                <Icon
+                  src={`https://cryptoicon-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`}
+                />
+                {coin.name}
               </Link>
-          </Coin>
-        ))}
-      </CoinsList>}
+            </Coin>
+          ))}
+        </CoinsList>
+      )}
     </Container>
   );
-};
+}
 
 export default Coins;
