@@ -1,7 +1,6 @@
 import { createGlobalStyle } from "styled-components";
 
 const ResetStyle = createGlobalStyle`
-@import url('https://fonts.googleapis.com/css2?family=PT+Sans&display=swap');
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -31,7 +30,7 @@ body {
 	line-height: 1;
 	background-color: ${(props) => props.theme.backgroundColor};
 	color: ${(props) => props.theme.textColor};
-	font-family: 'PT Sans', sans-serif;
+	letter-spacing: 3px;
 }
 ol, ul {
 	list-style: none;
