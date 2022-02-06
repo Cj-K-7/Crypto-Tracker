@@ -1,4 +1,4 @@
-#Crypto-Tracker
+# Crypto-Tracker
 
 Getting Started with Create React App --template Typescript
 
