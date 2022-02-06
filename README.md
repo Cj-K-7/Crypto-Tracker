@@ -2,6 +2,6 @@
 
 Getting Started with Create React App --template Typescript
 
--Typescript
--Styled-Components 
--React-Query
+- Typescript 
+- Styled-Components  
+- React-Query
