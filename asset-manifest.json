@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/react-github-pages/static/js/main.fc3cb14b.js",
-    "index.html": "/react-github-pages/index.html",
-    "main.fc3cb14b.js.map": "/react-github-pages/static/js/main.fc3cb14b.js.map"
+    "main.js": "/Crypto-Tracker/static/js/main.772256a5.js",
+    "index.html": "/Crypto-Tracker/index.html",
+    "main.772256a5.js.map": "/Crypto-Tracker/static/js/main.772256a5.js.map"
   },
   "entrypoints": [
-    "static/js/main.fc3cb14b.js"
+    "static/js/main.772256a5.js"
   ]
 }
