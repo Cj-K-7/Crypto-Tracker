@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet";
 import { useQuery } from "react-query";
 import { Link, Route, Switch, useLocation, useParams, useRouteMatch } from "react-router-dom";
 import styled from "styled-components";
@@ -107,7 +108,7 @@ const Description = styled.p`
  padding: 20px 10px;
 `;
 const DashBoard = styled.div`
-  margin: 20px;
+  margin: 20px 0px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
@@ -118,31 +119,40 @@ const GridElement = styled.div`
   flex-direction: column;
   justify-content: center;
   text-align: center;
-  padding : 15px 0px;
+  padding: 15px 0px;
   font-weight: 600;
-  box-shadow: 8px 6px 16px black inset;
   border-radius: 6px;
-  label{
-    margin-bottom: 10px;
-    font-size: 20px;
-    color: ${prop=>prop.theme.highlightColor};
-    text-shadow : 0px 0px 2px ${prop=>prop.theme.highlightColor};
+  transition: 0.4s linear;
+  &:hover {
+    box-shadow: 0px 0px 16px ${(prop) => prop.theme.highlightColor} inset;
+    transition: 0.4s linear;
   }
+  label {
+    margin-bottom: 10px;
+    font-size: 18px;
+    color: ${(prop) => prop.theme.highlightColor};
+  }
+`;
+const TABBox = styled.div`
+  box-shadow: 12px 16px 7px rgba(0,0,0,0.55);
 `;
 const TABS = styled.div`
   display: flex;
   justify-content: space-around;
   align-items: center;
   font-size: 20px;
-  margin: 5px 10px;
 `;
 const TAB = styled.div<{ isActive : boolean }>`
   width: 100%;
-  padding: 10px 0px;
+  padding: 14px 0px;
   text-align: center;
-  background-color: ${props=> props.isActive ? "black" : props.theme.backgroundColor};
+  color: ${props=> props.isActive ? props.theme.highlightColor : "inherit"};
+  border: 2px solid ${props=> props.isActive ? props.theme.highlightColor : "transparent" };
+  border-bottom: none;
+  border-radius: 8px 8px 0px 0px;
   a{
     padding : 10px 20px;
+    font-weight: bold;
     &:hover{
       color: ${prop=>prop.theme.highlightColor};
     }
@@ -154,7 +164,9 @@ const CoinDetail = () => {
 
   //useQuery
   const {isLoading : infoLoading , data : coinInfo} = useQuery<InfoData>(["info",coinId], ()=> fetchInfo(coinId));
-  const {isLoading : priceLoading , data : coinPrice} = useQuery<PriceData>(["price",coinId], ()=> fetchPrice(coinId));
+  const {isLoading : priceLoading , data : coinPrice} = useQuery<PriceData>(["price",coinId], ()=> fetchPrice(coinId),{
+    refetchInterval : 5000
+  });
   const priceMatch = useRouteMatch("/:coinId/price");
   const chartMatch = useRouteMatch("/:coinId/chart");
 
@@ -163,14 +175,20 @@ const CoinDetail = () => {
 
   return (
     <Container>
+      <Helmet>
+        <title>{state?.name
+            ? state.name
+            : loading
+            ? "Loading..."
+            : coinInfo?.name}</title>
+      </Helmet>
       <Header>
         <Title>
-          {" "}
           {state?.name
             ? state.name
             : loading
             ? "Loading..."
-            : coinInfo?.name}{" "}
+            : coinInfo?.name}
         </Title>
       </Header>
       {loading ? (
@@ -182,16 +200,10 @@ const CoinDetail = () => {
           </Rank>
           <DashBoard>
             <GridElement>
-              <label>PRICE</label> ${priceUSD?.price.toFixed(1)}
-            </GridElement>
-            <GridElement>
-              <label>ALL-TIME-HIGH</label>${priceUSD?.ath_price.toFixed(1)}
+              <label>PRICE</label> ${priceUSD?.price.toFixed(2)}
             </GridElement>
             <GridElement>
               <label>TOTAL SUPPLY</label> {coinPrice?.total_supply}
-            </GridElement>
-            <GridElement>
-              <label>MAX SUPPLY</label> {coinPrice?.max_supply}
             </GridElement>
             <GridElement>
               <label>SYMBOL</label> {coinInfo?.symbol}
@@ -202,6 +214,7 @@ const CoinDetail = () => {
               </label>
             </GridElement>
           </DashBoard>
+          <TABBox>
           <TABS>
             <TAB isActive={priceMatch !== null}>
               <Link
@@ -224,12 +237,13 @@ const CoinDetail = () => {
           </TABS>
           <Switch>
             <Route path="/:coinId/price">
-              <Price />
+              <Price coinId={coinId}/>
             </Route>
             <Route path="/:coinId/chart">
-              <Chart />
+              <Chart coinId={coinId}/>
             </Route>
           </Switch>
+          </TABBox>
           <Description>{coinInfo?.description}</Description>
         </>
       )}
