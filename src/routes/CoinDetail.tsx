@@ -78,8 +78,8 @@ const Container = styled.div`
 `;
 const Header = styled.header`
   display: flex;
-  margin-top: 48px;
-  margin-left: 30px;
+  margin-top: 40px;
+  margin-left: 18px;
   letter-spacing: 10px;
 `;
 const Title = styled.h1`
@@ -98,14 +98,16 @@ const Rank = styled.div`
   display: flex;
   justify-content: flex-end;
   align-items: flex-end;
-  margin-right: 20px;
+  margin-top : 8px;
+  margin-right: 10px;
   font-weight: 700;
   span{
     font-size: 24px;
   }
 `;
 const Description = styled.p`
- padding: 20px 10px;
+  margin-top: 36px;
+  margin-left: 12px;
 `;
 const DashBoard = styled.div`
   margin: 20px 0px;
@@ -118,23 +120,24 @@ const GridElement = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  text-align: center;
   padding: 15px 0px;
+  padding-left: 20px;
   font-weight: 600;
-  border-radius: 6px;
   transition: 0.4s linear;
+  color: ${(prop) => prop.theme.highlightColor};
   &:hover {
-    box-shadow: 0px 0px 16px ${(prop) => prop.theme.highlightColor} inset;
+    box-shadow: 0px 0px 10px ${(prop) => prop.theme.highlightColor} inset;
+    border-radius: 12px;
     transition: 0.4s linear;
   }
   label {
     margin-bottom: 10px;
-    font-size: 18px;
-    color: ${(prop) => prop.theme.highlightColor};
+    font-size: 16px;
+    color: ${(prop) => prop.theme.textColor};
   }
 `;
 const TABBox = styled.div`
-  box-shadow: 12px 16px 7px rgba(0,0,0,0.55);
+  box-shadow: 12px 16px 5px rgba(0,0,0,0.55);
 `;
 const TABS = styled.div`
   display: flex;
@@ -145,7 +148,6 @@ const TABS = styled.div`
 const TAB = styled.div<{ isActive : boolean }>`
   width: 100%;
   padding: 14px 0px;
-  text-align: center;
   color: ${props=> props.isActive ? props.theme.highlightColor : "inherit"};
   border: 2px solid ${props=> props.isActive ? props.theme.highlightColor : "transparent" };
   border-bottom: none;
@@ -153,10 +155,12 @@ const TAB = styled.div<{ isActive : boolean }>`
   a{
     padding : 10px 20px;
     font-weight: bold;
-    &:hover{
-      color: ${prop=>prop.theme.highlightColor};
-    }
-  }`;
+  }
+  &:hover{
+    color: ${prop=>prop.theme.highlightColor};
+    border-top: 2px solid ${prop=> prop.theme.highlightColor}
+  }
+`;
 
 const CoinDetail = () => {
   const { coinId } = useParams<RouteParams>();
@@ -200,18 +204,16 @@ const CoinDetail = () => {
           </Rank>
           <DashBoard>
             <GridElement>
-              <label>PRICE</label> ${priceUSD?.price.toFixed(2)}
+              <label>PRICE : </label> ${priceUSD?.price.toFixed(2)}
             </GridElement>
             <GridElement>
-              <label>TOTAL SUPPLY</label> {coinPrice?.total_supply}
+              <label>TOTAL SUPPLY : </label> {coinPrice?.total_supply}
             </GridElement>
             <GridElement>
-              <label>SYMBOL</label> {coinInfo?.symbol}
+              <label>SYMBOL : </label> {coinInfo?.symbol}
             </GridElement>
             <GridElement>
-              <label>
                 {coinInfo?.open_source ? "Open Source" : "Closed Source"}
-              </label>
             </GridElement>
           </DashBoard>
           <TABBox>

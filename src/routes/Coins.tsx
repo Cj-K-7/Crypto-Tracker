@@ -37,8 +37,8 @@ const Coin = styled.li`
     align-items: center;
   }
   &:hover {
-    margin-top: -3px;
-    margin-left: -2px;
+    margin-top: -8px;
+    margin-left: -3px;
     box-shadow: 0px 1.6px 0px ${(props) => props.theme.hoverColor};
     transition: 0.4s;
     color: ${(props) => props.theme.hoverColor};

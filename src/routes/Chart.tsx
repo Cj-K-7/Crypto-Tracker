@@ -17,7 +17,12 @@ interface IData {
 interface ChartProps {
   coinId: string;
 }
-
+const Loader = styled.h1`
+  margin-top: 30px;
+  font-weight: 600;
+  text-align: center;
+  letter-spacing: 10px;
+`;
 const ChartBox = styled.div`
   background-color: transparent;
   border: 2px solid ${prop=>prop.theme.highlightColor};
@@ -34,13 +39,17 @@ const ChartBox = styled.div`
 `;
 
 function Chart({ coinId }: ChartProps) {
-  const { isLoading, data } = useQuery<IData[]>(["ohlcv", coinId], () =>
-    fetchOHLCV(coinId)
+  const { isLoading, data } = useQuery<IData[]>(
+    ["ohlcv", coinId],
+    () => fetchOHLCV(coinId, 14),
+    { refetchInterval: 5000 }
   );
   return (
     <ChartBox>
       {isLoading ? (
-        "Loading chart..."
+        <Loader>
+          "Loading chart..."
+        </Loader>
       ) : (
         <ApexChart
           type="line"
@@ -51,12 +60,15 @@ function Chart({ coinId }: ChartProps) {
             },
           ]}
           options={{
+            chart: {
+              background: "transparent",
+              height: 480,
+              width: 480,
+              toolbar: { show: false },
+            },
             xaxis: {
               type: "datetime",
               categories: data?.map((price) => price.time_close),
-              labels: { show: false },
-              axisTicks: { show: false },
-              axisBorder: { show: false },
             },
             yaxis: { show: false },
             fill: {
@@ -64,14 +76,9 @@ function Chart({ coinId }: ChartProps) {
               gradient: { gradientToColors: ["blue"], stops: [0, 100] },
             },
             colors: ["cyan"],
-            grid: { borderColor: 'rgb(70,100,100)' },
-            chart: {
-              background: "transparent",
-              height: 500,
-              width: 480,
-            },
+            grid: { show: false },
             theme: { mode: "dark" },
-            stroke: { curve: "smooth", width: 3 },
+            stroke: { curve: "smooth", width: 4 },
             tooltip: {
               y: { formatter: (value) => `$${value.toFixed(2)}` },
             },

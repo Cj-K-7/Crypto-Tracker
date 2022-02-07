@@ -30,6 +30,7 @@ body {
 	line-height: 1;
 	background-color: ${(props) => props.theme.backgroundColor};
 	color: ${(props) => props.theme.textColor};
+	font-weight: 500;
 	letter-spacing: 3px;
 }
 ol, ul {
