@@ -2,6 +2,9 @@
 
 Getting Started with Create React App --template Typescript
 
+**See Result**
+ [Result](https://cj-k-7.github.io/Crypto-Tracker/)
+ 
 ##Lib's
 - Typescript
 - [Styled-Components](https://styled-components.com/) 
