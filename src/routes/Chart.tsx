@@ -2,6 +2,7 @@ import { useQuery } from "react-query";
 import { fetchOHLCV } from "../API";
 import ApexChart from "react-apexcharts";
 import styled from "styled-components";
+import { useState } from "react";
 
 interface IData {
   close: Number;
@@ -18,7 +19,7 @@ interface ChartProps {
   coinId: string;
 }
 const Loader = styled.h1`
-  margin-top: 30px;
+  margin: 30px 0px;
   font-weight: 600;
   text-align: center;
   letter-spacing: 10px;
@@ -37,6 +38,16 @@ const ChartBox = styled.div`
     border-top: 2px solid ${prop=>prop.theme.highlightColor};
   }
 `;
+const Toggle = styled.button`
+  position: relative;
+  top : 10px;
+  left : 16px;
+  padding : 6px;
+  border : none;
+  background-color: inherit;
+  color : inherit;
+  font-size : 20px;
+`;
 
 function Chart({ coinId }: ChartProps) {
   const { isLoading, data } = useQuery<IData[]>(
@@ -47,20 +58,21 @@ function Chart({ coinId }: ChartProps) {
   return (
     <ChartBox>
       {isLoading ? (
-        <Loader>
-          "Loading chart..."
-        </Loader>
+        <Loader>"Loading chart..."</Loader>
       ) : (
         <ApexChart
-          type="line"
+          type="candlestick"
           series={[
             {
               name: "Price",
-              data: data?.map((price) => price.close),
+              data: data?.map(({ open, high, low, close, time_close }) => {
+                return { x: new Date(time_close), y: [open, high, low, close] };
+              }),
             },
           ]}
           options={{
             chart: {
+              type: "candlestick",
               background: "transparent",
               height: 480,
               width: 480,
@@ -68,20 +80,16 @@ function Chart({ coinId }: ChartProps) {
             },
             xaxis: {
               type: "datetime",
-              categories: data?.map((price) => price.time_close),
             },
-            yaxis: { show: false },
+            yaxis: {
+              show: false,
+            },
             fill: {
-              type: "gradient",
-              gradient: { gradientToColors: ["blue"], stops: [0, 100] },
+              type:"solid"
             },
-            colors: ["cyan"],
             grid: { show: false },
             theme: { mode: "dark" },
-            stroke: { curve: "smooth", width: 4 },
-            tooltip: {
-              y: { formatter: (value) => `$${value.toFixed(2)}` },
-            },
+            stroke: { width: 1 },
           }}
         />
       )}

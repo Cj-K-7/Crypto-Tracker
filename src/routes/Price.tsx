@@ -1,24 +1,13 @@
-import ApexCharts from "react-apexcharts"
 import { useQuery } from "react-query";
 import styled from "styled-components";
-import { fetchOHLCV } from "../API";
-
-interface IData {
-  close: Number;
-  high: number;
-  low: number;
-  market_cap: number;
-  open: number;
-  time_close: string;
-  time_open: string;
-  volume: number;
-}
+import { fetchPrice } from "../API";
+import { PriceData } from "./CoinDetail";
 
 interface PriceProps {
   coinId: string;
 }
 const Loader = styled.h1`
-  margin-top: 30px;
+  margin: 30px 0px;
   font-weight: 600;
   text-align: center;
   letter-spacing: 10px;
@@ -37,60 +26,47 @@ const PriceBox = styled.div`
     border-top: 2px solid ${prop=>prop.theme.highlightColor};
   }
 `;
-
+const Content =styled.div`
+  padding: 30px 20px;
+`;
+const Header = styled.h1`
+  margin-bottom : 30px;
+  font-size : 36px;
+  font-weight : 600;
+`;
+const Tablet = styled.div`
+  h1{
+    margin-top : 18px;
+    margin-bottom : 10px;
+    font-size : 22px;
+    font-weight : 600;
+  }
+`;
+const HL = styled.span`
+  font-size : 28px;
+  line-height : 38px;
+  color: ${prop=>prop.theme.highlightColor};
+`;
 function Price({ coinId }: PriceProps) {
-  const { isLoading, data } = useQuery<IData[]>(
-    ["ohlcv", coinId],
-    () => fetchOHLCV(coinId, 28),
-    { refetchInterval: 5000 }
-  );
+  const { isLoading , data } = useQuery<PriceData>(["price",coinId], ()=> fetchPrice(coinId),{refetchInterval: 3000});
+  const priceList = data?.quotes.USD;
   return (
     <PriceBox>
-      {isLoading ? (
+      { isLoading ? (
         <Loader>
           "Loading Price info..."
         </Loader>
       ) : (
-        <ApexCharts
-          type="candlestick"
-          series={[
-            {
-              name: "Price",
-              data: data?.map(({ open, high, low, close, time_close }) => {
-                return { x: new Date(time_close), y: [open, high, low, close] };
-              }),
-            },
-          ]}
-          options={{
-            chart: {
-              type: "candlestick",
-              background: "transparent",
-              height: 480,
-              width: 480,
-              toolbar: { show: false },
-            },
-            xaxis: {
-              type: "datetime",
-            },
-            yaxis: {
-              show: false,
-              tooltip: {
-                enabled: true,
-              },
-            },
-            plotOptions: {
-              bar: {
-                columnWidth: "200%",
-              },
-            },
-            grid: { show: false },
-            theme: { mode: "dark" },
-            stroke: { width: 1 },
-            tooltip: {
-              y: { formatter: (value) => `$${value.toFixed(2)}` },
-            },
-          }}
-        />
+        <Content>
+          <Header>${priceList?.price.toFixed(4)} [<HL>{priceList?.percent_change_24h}%</HL>]</Header>
+          <hr></hr>
+          <Tablet>
+            <h1>MARKET CAP :<br/> <HL> ${priceList?.market_cap}</HL></h1>
+            <p> the total value of all a company's shares of stock</p>
+            <h1>VOLUME :<br/> <HL>{priceList?.volume_24h}</HL></h1>
+            <p> the sum total of actual trades taking place within 24h</p>
+          </Tablet>
+        </Content>
       )}
     </PriceBox>
   );

@@ -32,7 +32,7 @@ interface InfoData {
   first_data_at: string;
   last_data_at: string;
 }
-interface PriceData {
+export interface PriceData {
   id: string;
   name: string;
   symbol: string;
@@ -78,9 +78,18 @@ const Container = styled.div`
 `;
 const Header = styled.header`
   display: flex;
-  margin-top: 40px;
+  margin-top: 20px;
   margin-left: 18px;
   letter-spacing: 10px;
+`;
+const Home = styled.div`
+  margin-top : 18px;
+  font-weight : bold;
+  transition : 0.25s;
+  &:hover{
+    text-shadow : 0px 0px 10px ${(prop) => prop.theme.highlightColor};
+    transition : 0.25s;
+  }
 `;
 const Title = styled.h1`
   font-size: 38px;
@@ -151,14 +160,14 @@ const TAB = styled.div<{ isActive : boolean }>`
   color: ${props=> props.isActive ? props.theme.highlightColor : "inherit"};
   border: 2px solid ${props=> props.isActive ? props.theme.highlightColor : "transparent" };
   border-bottom: none;
-  border-radius: 8px 8px 0px 0px;
+  border-radius: 12px 12px 0px 0px;
   a{
     padding : 10px 20px;
     font-weight: bold;
   }
   &:hover{
     color: ${prop=>prop.theme.highlightColor};
-    border-top: 2px solid ${prop=> prop.theme.highlightColor}
+    box-shadow: 0px 6px 0px ${prop=> prop.theme.highlightColor} inset;
   }
 `;
 
@@ -186,6 +195,9 @@ const CoinDetail = () => {
             ? "Loading..."
             : coinInfo?.name}</title>
       </Helmet>
+      <Home>
+          <Link to="/">to Home </Link>
+      </Home>
       <Header>
         <Title>
           {state?.name
